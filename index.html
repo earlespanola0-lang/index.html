@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Faded Text</title>
+  <title>Good Morning</title>
 
   <style>
     body {
@@ -12,7 +12,7 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: Arial;
     }
 
     #text {
@@ -22,10 +22,10 @@
 
     .letter {
       opacity: 0;
-      animation: fadeIn 0.5s forwards;
+      animation: fade 0.5s forwards;
     }
 
-    @keyframes fadeIn {
+    @keyframes fade {
       from {
         opacity: 0;
         filter: blur(5px);
@@ -43,7 +43,7 @@
   <div id="text"></div>
 
   <script>
-    const message = "Good morning, Migoooooo❤️.";
+    const message = "Good morning, migoooo❤️";
     const text = document.getElementById("text");
 
     let i = 0;
@@ -67,13 +67,13 @@
       if (i < message.length) {
         const letter = document.createElement("span");
 
-        letter.textContent = message[i] === " " ? "\u00A0" : message[i];
-        letter.className = "letter";
+        letter.textContent =
+          message[i] === " " ? "\u00A0" : message[i];
 
+        letter.className = "letter";
         text.appendChild(letter);
 
         beep();
-
         i++;
 
         setTimeout(typeText, 100);
