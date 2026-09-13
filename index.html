@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Faded Text</title>
+
+  <style>
+    body {
+      background: black;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    #text {
+      font-size: 32px;
+      text-align: center;
+    }
+
+    .letter {
+      opacity: 0;
+      animation: fadeIn 0.5s forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        filter: blur(5px);
+      }
+      to {
+        opacity: 1;
+        filter: blur(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="text"></div>
+
+  <script>
+    const message = "It takes time to fall in love, so be patient.";
+    const text = document.getElementById("text");
+
+    let i = 0;
+
+    function beep() {
+      const audio = new AudioContext();
+      const oscillator = audio.createOscillator();
+      const gain = audio.createGain();
+
+      oscillator.frequency.value = 600;
+      gain.gain.value = 0.08;
+
+      oscillator.connect(gain);
+      gain.connect(audio.destination);
+
+      oscillator.start();
+      oscillator.stop(audio.currentTime + 0.06);
+    }
+
+    function typeText() {
+      if (i < message.length) {
+        const letter = document.createElement("span");
+
+        letter.textContent = message[i] === " " ? "\u00A0" : message[i];
+        letter.className = "letter";
+
+        text.appendChild(letter);
+
+        beep();
+
+        i++;
+
+        setTimeout(typeText, 100);
+      }
+    }
+
+    typeText();
+  </script>
+
+</body>
+</html>
