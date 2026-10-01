@@ -67,7 +67,7 @@ async function startHandTracking() {
         minTrackingConfidence: 0.5
       });
 
-    status.textContent = "🖐️ Hand tracking is ON!";
+    status.textContent = " Hand tracking is ON!";
 
     trackHands();
 
