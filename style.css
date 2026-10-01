@@ -4,50 +4,281 @@
 
 body {
   margin: 0;
-  background: #111;
-  color: white;
+  background: #020609;
+  color: #00eaff;
   font-family: Arial, sans-serif;
-  text-align: center;
+  overflow-x: hidden;
 }
 
-h1 {
-  margin: 20px 0;
-  font-size: 28px;
+.hud {
+  width: 100%;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at center, #08242b 0%, #020609 60%);
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+
+  border-bottom: 1px solid rgba(0, 234, 255, 0.35);
+
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+.dot {
+  display: inline-block;
+
+  width: 8px;
+  height: 8px;
+
+  background: #00ff88;
+
+  border-radius: 50%;
+
+  margin-right: 7px;
+
+  box-shadow: 0 0 12px #00ff88;
+}
+
+.scene {
+  position: relative;
+
+  width: 100%;
+  max-width: 900px;
+
+  margin: 15px auto;
+
+  aspect-ratio: 16 / 11;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(0, 234, 255, 0.35);
+
+  background: #000;
 }
 
 .camera-box {
-  position: relative;
-  width: 95%;
-  max-width: 700px;
-  margin: auto;
-  overflow: hidden;
-  border-radius: 18px;
-  background: #000;
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 1;
 }
 
 video {
   width: 100%;
-  display: block;
+  height: 100%;
 
-  /* Selfie mirror */
+  object-fit: cover;
+
   transform: scaleX(-1);
+
+  opacity: 0.25;
 }
 
-canvas {
+#canvas {
   position: absolute;
-  top: 0;
-  left: 0;
+
+  inset: 0;
 
   width: 100%;
   height: 100%;
 
-  /* Match the mirrored camera */
   transform: scaleX(-1);
 
   pointer-events: none;
 }
 
-#status {
-  margin: 15px;
-  font-size: 16px;
+#threeCanvas {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 4;
+
+  pointer-events: none;
 }
+
+.target {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 180px;
+  height: 180px;
+
+  transform: translate(-50%, -50%);
+
+  z-index: 5;
+
+  pointer-events: none;
+}
+
+.target-ring {
+  width: 100%;
+  height: 100%;
+
+  border: 1px solid rgba(0, 234, 255, 0.35);
+
+  border-radius: 50%;
+
+  animation: rotate 8s linear infinite;
+}
+
+.target-ring::before,
+.target-ring::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: -15px;
+
+  width: 1px;
+  height: 210px;
+
+  background: rgba(0, 234, 255, 0.25);
+}
+
+.target-ring::after {
+  transform: rotate(90deg);
+}
+
+.crosshair {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 15px;
+  height: 15px;
+
+  transform: translate(-50%, -50%);
+
+  border: 1px solid #00eaff;
+}
+
+.scan-line {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  height: 2px;
+
+  top: 0;
+
+  z-index: 8;
+
+  background: rgba(0, 234, 255, 0.6);
+
+  box-shadow: 0 0 15px #00eaff;
+
+  animation: scan 4s linear infinite;
+
+  pointer-events: none;
+}
+
+.bottom-panel {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 8px;
+
+  max-width: 900px;
+
+  margin: 0 auto;
+
+  padding: 10px;
+}
+
+.bottom-panel div {
+  padding: 10px;
+
+  border: 1px solid rgba(0, 234, 255, 0.25);
+
+  background: rgba(0, 30, 38, 0.6);
+
+  font-size: 11px;
+
+  letter-spacing: 1px;
+}
+
+.label {
+  display: block;
+
+  color: #5c8991;
+
+  margin-bottom: 5px;
+}
+
+.online {
+  color: #00ff88;
+}
+
+#status {
+  text-align: center;
+
+  font-size: 12px;
+
+  letter-spacing: 1px;
+
+  color: #75aeb7;
+}
+
+@keyframes scan {
+
+  0% {
+    top: 0;
+  }
+
+  50% {
+    top: 100%;
+  }
+
+  100% {
+    top: 0;
+  }
+
+}
+
+@keyframes rotate {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .top-bar {
+    font-size: 9px;
+
+    letter-spacing: 1px;
+  }
+
+  .bottom-panel {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .scene {
+    aspect-ratio: 4 / 5;
+  }
+
+  }
