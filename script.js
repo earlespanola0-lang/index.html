@@ -3,18 +3,26 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const status = document.getElementById("status");
 
-let handLandmarker;
+let handLandmarker = null;
 let lastVideoTime = -1;
 
 
-// =========================
-// START CAMERA FIRST
-// =========================
+// ======================================
+// 1. START CAMERA
+// ======================================
+
 async function startCamera() {
   try {
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      throw new Error("Camera is not supported by this browser.");
+    }
+
     const stream = await navigator.mediaDevices.getUserMedia({
       video: {
-        facingMode: "user"
+        facingMode: "user",
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
       },
       audio: false
     });
@@ -23,7 +31,7 @@ async function startCamera() {
 
     await video.play();
 
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       if (video.readyState >= 2) {
         resolve();
       } else {
@@ -34,65 +42,78 @@ async function startCamera() {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
-    status.textContent = "Camera ready! Loading hand tracker...";
+    status.textContent = "Camera working — loading hand tracker...";
 
-    loadHandTracker();
+    // Start MediaPipe separately
+    loadMediaPipe();
 
   } catch (error) {
-    console.error(error);
-    status.textContent = "Camera error: " + error.message;
+
+    console.error("CAMERA ERROR:", error);
+
+    status.textContent =
+      "Camera error: " + error.message;
   }
 }
 
 
-// =========================
-// LOAD MEDIAPIPE
-// =========================
-async function loadHandTracker() {
+// ======================================
+// 2. LOAD MEDIAPIPE
+// ======================================
+
+async function loadMediaPipe() {
+
   try {
 
-    const {
-      HandLandmarker,
-      FilesetResolver
-    } = await import(
-      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/vision_bundle.mjs"
+    const MediaPipe = await import(
+      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/+esm"
     );
+
+    const HandLandmarker = MediaPipe.HandLandmarker;
+    const FilesetResolver = MediaPipe.FilesetResolver;
 
     const vision = await FilesetResolver.forVisionTasks(
       "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/wasm"
     );
 
-    handLandmarker = await HandLandmarker.createFromOptions(
-      vision,
-      {
-        baseOptions: {
-          modelAssetPath:
-            "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task"
-        },
+    handLandmarker =
+      await HandLandmarker.createFromOptions(
+        vision,
+        {
+          baseOptions: {
+            modelAssetPath:
+              "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task"
+          },
 
-        runningMode: "VIDEO",
-        numHands: 2
-      }
-    );
+          runningMode: "VIDEO",
 
-    status.textContent = "🖐️ Show your hand!";
+          numHands: 2,
+
+          minHandDetectionConfidence: 0.5,
+          minHandPresenceConfidence: 0.5,
+          minTrackingConfidence: 0.5
+        }
+      );
+
+    status.textContent = "🖐️ Hand tracker ready!";
 
     detectHands();
 
   } catch (error) {
 
-    console.error(error);
+    console.error("MEDIAPIPE ERROR:", error);
 
     status.textContent =
-      "Camera works, but the hand tracker failed to load.";
+      "Camera works, but hand tracking could not load.";
 
   }
 }
 
 
-// =========================
-// DETECT HANDS
-// =========================
+// ======================================
+// 3. DETECT HANDS
+// ======================================
+
 function detectHands() {
 
   if (!handLandmarker) {
@@ -100,25 +121,38 @@ function detectHands() {
     return;
   }
 
-  if (video.readyState >= 2 && video.currentTime !== lastVideoTime) {
+  if (
+    video.readyState >= 2 &&
+    video.currentTime !== lastVideoTime
+  ) {
 
     lastVideoTime = video.currentTime;
 
-    const results = handLandmarker.detectForVideo(
-      video,
-      performance.now()
-    );
+    try {
 
-    drawHands(results);
+      const results =
+        handLandmarker.detectForVideo(
+          video,
+          performance.now()
+        );
+
+      drawHands(results);
+
+    } catch (error) {
+
+      console.error("DETECTION ERROR:", error);
+
+    }
   }
 
   requestAnimationFrame(detectHands);
 }
 
 
-// =========================
-// DRAW HANDS
-// =========================
+// ======================================
+// 4. DRAW HAND
+// ======================================
+
 function drawHands(results) {
 
   ctx.clearRect(
@@ -128,22 +162,50 @@ function drawHands(results) {
     canvas.height
   );
 
-  if (!results.landmarks) return;
+  if (
+    !results ||
+    !results.landmarks ||
+    results.landmarks.length === 0
+  ) {
+    return;
+  }
 
   for (const landmarks of results.landmarks) {
 
-    // Draw connections
+    // Hand connections
+    const connections = [
+      [0, 1],
+      [1, 2],
+      [2, 3],
+      [3, 4],
+
+      [0, 5],
+      [5, 6],
+      [6, 7],
+      [7, 8],
+
+      [5, 9],
+      [9, 10],
+      [10, 11],
+      [11, 12],
+
+      [9, 13],
+      [13, 14],
+      [14, 15],
+      [15, 16],
+
+      [13, 17],
+      [17, 18],
+      [18, 19],
+      [19, 20],
+
+      [0, 17]
+    ];
+
+    // Draw green lines
     ctx.strokeStyle = "#00ff66";
     ctx.lineWidth = 5;
-
-    const connections = [
-      [0,1], [1,2], [2,3], [3,4],
-      [0,5], [5,6], [6,7], [7,8],
-      [5,9], [9,10], [10,11], [11,12],
-      [9,13], [13,14], [14,15], [15,16],
-      [13,17], [17,18], [18,19], [19,20],
-      [0,17]
-    ];
+    ctx.lineCap = "round";
 
     for (const [a, b] of connections) {
 
@@ -154,20 +216,29 @@ function drawHands(results) {
       const y2 = landmarks[b].y * canvas.height;
 
       ctx.beginPath();
+
       ctx.moveTo(x1, y1);
       ctx.lineTo(x2, y2);
+
       ctx.stroke();
     }
 
 
-    // Draw 21 landmarks
+    // Draw 21 points
     for (const point of landmarks) {
 
       const x = point.x * canvas.width;
       const y = point.y * canvas.height;
 
       ctx.beginPath();
-      ctx.arc(x, y, 7, 0, Math.PI * 2);
+
+      ctx.arc(
+        x,
+        y,
+        7,
+        0,
+        Math.PI * 2
+      );
 
       ctx.fillStyle = "#00ff66";
       ctx.fill();
@@ -176,5 +247,8 @@ function drawHands(results) {
 }
 
 
-// START
+// ======================================
+// START EVERYTHING
+// ======================================
+
 startCamera();
