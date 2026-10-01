@@ -15,18 +15,26 @@ h1 {
   width: 95%;
   max-width: 700px;
   margin: auto;
+  overflow: hidden;
+  border-radius: 15px;
 }
 
 video,
 canvas {
   width: 100%;
+  display: block;
   border-radius: 15px;
+}
+
+video {
+  transform: scaleX(-1);
 }
 
 canvas {
   position: absolute;
   left: 0;
   top: 0;
+  transform: scaleX(-1);
 }
 
 #status {
