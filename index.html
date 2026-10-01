@@ -4,21 +4,69 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Hand Tracker</title>
+  <title>Holographic Hand Interface</title>
 
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <h1> Hand Tracker</h1>
+  <div class="hud">
 
-  <div class="camera-box">
-    <video id="video" autoplay playsinline muted></video>
-    <canvas id="canvas"></canvas>
+    <div class="top-bar">
+      <div>
+        <span class="dot"></span>
+        SYSTEM ONLINE
+      </div>
+
+      <div>HOLOGRAPHIC INTERFACE</div>
+    </div>
+
+    <div class="scene">
+
+      <div class="camera-box">
+        <video id="video" autoplay playsinline muted></video>
+        <canvas id="canvas"></canvas>
+      </div>
+
+      <canvas id="threeCanvas"></canvas>
+
+      <div class="target">
+        <div class="target-ring"></div>
+        <div class="crosshair"></div>
+      </div>
+
+      <div class="scan-line"></div>
+
+    </div>
+
+    <div class="bottom-panel">
+
+      <div>
+        <span class="label">HAND</span>
+        <span id="handStatus">SEARCHING</span>
+      </div>
+
+      <div>
+        <span class="label">CONTROL</span>
+        <span id="gesture">NONE</span>
+      </div>
+
+      <div>
+        <span class="label">ZOOM</span>
+        <span id="zoom">100%</span>
+      </div>
+
+      <div>
+        <span class="label">SYSTEM</span>
+        <span class="online">ONLINE</span>
+      </div>
+
+    </div>
+
+    <p id="status">Starting camera...</p>
+
   </div>
-
-  <p id="status">Starting camera...</p>
 
   <script type="module" src="script.js"></script>
 
