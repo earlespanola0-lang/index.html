@@ -1,3 +1,13 @@
+<script type="module">
+  import {
+    HandLandmarker,
+    FilesetResolver
+  } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/vision_bundle.mjs";
+
+  window.HandLandmarker = HandLandmarker;
+  window.FilesetResolver = FilesetResolver;
+</script>
+
 const video = document.getElementById("video");
 const status = document.getElementById("status");
 
