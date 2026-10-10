@@ -1,74 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Holographic Hand Interface</title>
-
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Audio</title>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+    <div class="container">
+        <h1>Web Audio</h1>
 
-  <div class="hud">
+        <div class="bgcover">
+            <img
+                src="3dcbc2ba6a3f6ded21c66f23b1b9b2cb.gif"
+                alt="Animated background"
+                id="hp"
+            >
+        </div>
 
-    <div class="top-bar">
-      <div>
-        <span class="dot"></span>
-        SYSTEM ONLINE
-      </div>
+        <div class="audio">
+            <p>My Music Player</p>
 
-      <div>HOLOGRAPHIC INTERFACE</div>
+            <audio controls preload="metadata">
+                <source src="tiktokio_audio.mp3" type="audio/mpeg">
+                Your browser does not support audio.
+            </audio>
+        </div>
     </div>
-
-    <div class="scene">
-
-      <div class="camera-box">
-        <video id="video" autoplay playsinline muted></video>
-        <canvas id="canvas"></canvas>
-      </div>
-
-      <canvas id="threeCanvas"></canvas>
-
-      <div class="target">
-        <div class="target-ring"></div>
-        <div class="crosshair"></div>
-      </div>
-
-      <div class="scan-line"></div>
-
-    </div>
-
-    <div class="bottom-panel">
-
-      <div>
-        <span class="label">HAND</span>
-        <span id="handStatus">SEARCHING</span>
-      </div>
-
-      <div>
-        <span class="label">CONTROL</span>
-        <span id="gesture">NONE</span>
-      </div>
-
-      <div>
-        <span class="label">ZOOM</span>
-        <span id="zoom">100%</span>
-      </div>
-
-      <div>
-        <span class="label">SYSTEM</span>
-        <span class="online">ONLINE</span>
-      </div>
-
-    </div>
-
-    <p id="status">Starting camera...</p>
-
-  </div>
-
-  <script type="module" src="script.js"></script>
-
 </body>
 </html>
