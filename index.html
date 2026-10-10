@@ -22,63 +22,14 @@
         <div class="audio">
             <p>My Music Player</p>
 
-            <video
-                id="music"
-                controls
-                playsinline
-                preload="metadata"
-            >
+            <audio controls preload="metadata">
                 <source
                     src="tiktokio.com1791624564_As9WG2zSaHFATnjf2Crx.mp4"
-                    type="video/mp4"
+                    type="audio/mp4"
                 >
-                Your browser does not support video playback.
-            </video>
-
-            <div class="playback">
-                <button onclick="rewind()">⏪ 10s</button>
-                <button onclick="playPause()" id="playBtn">Play</button>
-                <button onclick="forward()">10s ⏩</button>
-            </div>
+                Your browser does not support audio playback.
+            </audio>
         </div>
     </div>
-
-    <script>
-        const video = document.getElementById("music");
-        const playBtn = document.getElementById("playBtn");
-
-        function playPause() {
-            if (video.paused) {
-                video.play().catch(() => {});
-            } else {
-                video.pause();
-            }
-        }
-
-        function rewind() {
-            video.currentTime = Math.max(0, video.currentTime - 10);
-        }
-
-        function forward() {
-            if (Number.isFinite(video.duration)) {
-                video.currentTime = Math.min(
-                    video.duration,
-                    video.currentTime + 10
-                );
-            }
-        }
-
-        video.addEventListener("play", () => {
-            playBtn.textContent = "Pause";
-        });
-
-        video.addEventListener("pause", () => {
-            playBtn.textContent = "Play";
-        });
-
-        video.addEventListener("ended", () => {
-            playBtn.textContent = "Play";
-        });
-    </script>
 </body>
 </html>
