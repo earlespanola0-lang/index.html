@@ -13,9 +13,20 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+/* Name in the top-right corner */
+.brand {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    color: lightblue;
+    letter-spacing: 1px;
+}
+
 .container {
     text-align: center;
-    padding: 30px 15px;
+    padding: 55px 15px 30px;
 }
 
 .container h1 {
