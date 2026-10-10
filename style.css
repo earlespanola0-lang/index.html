@@ -42,34 +42,9 @@ body {
     font-size: 16px;
 }
 
-.audio video {
+.audio audio {
     display: block;
     width: 100%;
     max-width: 400px;
     margin: 0 auto;
-    border-radius: 10px;
-}
-
-.playback {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 15px;
-    flex-wrap: wrap;
-}
-
-.playback button {
-    background: lightblue;
-    color: #111;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 16px;
-    font-family: inherit;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.playback button:active {
-    transform: scale(0.96);
 }
